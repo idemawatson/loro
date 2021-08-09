@@ -2,25 +2,29 @@ package main
 
 import (
 	"context"
-	"log"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/awslabs/aws-lambda-go-api-proxy/gin"
+	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	"github.com/gin-gonic/gin"
+
+	"loro-handler/controllers"
+	"loro-handler/middleware"
 )
 
 var ginLambda *ginadapter.GinLambda
 
 func init() {
-	// stdout and stderr are sent to AWS CloudWatch Logs
-	log.Printf("Gin cold start")
 	r := gin.Default()
+	r.Use(middleware.RecordUaAndTime)
+	r.Use(middleware.ErrorHandler)
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
 	})
+	userController := controllers.NewUserController()
+	r.GET("/listUser", userController.ListUser)
 
 	ginLambda = ginadapter.New(r)
 }
