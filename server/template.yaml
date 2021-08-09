@@ -8,7 +8,7 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 5
+    Timeout: 25
 
 Resources:
   LoRoHandlerFunction:
@@ -26,7 +26,63 @@ Resources:
             Method: ANY
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
-          PARAM1: VALUE
+          REGION: "ap-northeast-1"
+          MAIN_TABLE: "LoroMain"
+  LoroMain:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: LoroMain
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: postedAt
+          AttributeType: S
+        - AttributeName: favorite
+          AttributeType: S
+        - AttributeName: following
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      GlobalSecondaryIndexes:
+        - IndexName: userId-following-Index
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            - AttributeName: following
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+        - IndexName: userId-postedAt-Index
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            - AttributeName: postedAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+        - IndexName: userId-favorite-Index
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            - AttributeName: favorite
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -34,10 +90,13 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   LoRoHandlerAPI:
     Description: "API Gateway endpoint URL for Prod environment for First Function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
   LoRoHandlerFunction:
     Description: "First Lambda Function ARN"
     Value: !GetAtt LoRoHandlerFunction.Arn
   LoRoHandlerFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt LoRoHandlerFunctionRole.Arn
+  DynamoTableRoloMain:
+    Description: "Main Dynamo Table ARN"
+    Value: !GetAtt LoroMain.Arn
