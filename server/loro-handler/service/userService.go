@@ -8,21 +8,6 @@ import (
 
 type UserService struct{}
 
-// func NewUser(userId string, userName string, description string, mailAddress string, profilePicturePath string) *models.User {
-// 	u := new(models.User)
-// 	u.Id = "111"
-// 	u.UserId = userId
-// 	u.UserName = userName
-// 	u.Description = description
-// 	u.MailAddress = mailAddress
-// 	u.ProfilePicturePath = profilePicturePath
-// 	u.NumPost = 0
-// 	u.NumFollowing = 0
-// 	u.NumFollowed = 0
-// 	u.NumFavorite = 0
-// 	return u
-// }
-
 func (UserService) CreateUser() error {
 	user := models.User{
 		Id:     "000001",
