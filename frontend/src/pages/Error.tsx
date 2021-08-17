@@ -6,6 +6,22 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 
 const Error: React.FC = () => {
+  const useStyles = makeStyles({
+    root: {
+      minWidth: 275,
+    },
+    bullet: {
+      display: "inline-block",
+      margin: "0 2px",
+      transform: "scale(0.8)",
+    },
+    title: {
+      fontSize: 14,
+    },
+    pos: {
+      marginBottom: 12,
+    },
+  });
   const classes = useStyles();
   return (
     <Container component="main" maxWidth="xs">
@@ -26,22 +42,5 @@ const Error: React.FC = () => {
     </Container>
   );
 };
-
-const useStyles = makeStyles({
-  root: {
-    minWidth: 275,
-  },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-});
 
 export default Error;
