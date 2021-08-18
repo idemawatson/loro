@@ -10,6 +10,7 @@ const BottomNav: React.FC = () => {
   const useStyles = makeStyles({
     "bottom-nav": {
       position: "fixed",
+      width: "100%",
       bottom: 0,
     },
   });
