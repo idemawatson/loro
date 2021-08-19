@@ -1,11 +1,15 @@
 import { reducerWithInitialState } from "typescript-fsa-reducers";
 
 export interface State {
-  //ここにstoreが持つstateを書く
+  user: {
+    userId: string;
+  };
 }
 
 export const initialState: State = {
-  //ここにstateの初期値を書く
+  user: {
+    userId: "000001",
+  },
 };
 
 export const Reducer = reducerWithInitialState(initialState);

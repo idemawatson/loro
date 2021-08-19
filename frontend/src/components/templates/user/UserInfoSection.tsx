@@ -42,10 +42,10 @@ const UserInfoSection: React.FC<UserInfoSectionProps> = (props) => {
         </Grid>
       </Grid>
       <Grid container spacing={1}>
-        <Grid container xs={2}>
+        <Grid container>
           <Avatar className={classes.avatar}>T</Avatar>
         </Grid>
-        <Grid container xs={10}>
+        <Grid container>
           <Grid item xs={3} className={classes.caption}>
             <Typography>{props.numPost}</Typography>
             <Typography variant="caption">投稿</Typography>
