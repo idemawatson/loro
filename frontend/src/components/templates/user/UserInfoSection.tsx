@@ -2,6 +2,9 @@ import React from "react";
 import Avatar from "@material-ui/core/Avatar";
 import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { fetchUserInfo } from "users/operations";
+import { getUserInfo } from "users/selectors";
+import { useSelector } from "react-redux";
 
 export type UserInfoSectionProps = {
   username: string;
@@ -31,6 +34,9 @@ const UserInfoSection: React.FC<UserInfoSectionProps> = (props) => {
     },
   }));
   const classes = useStyles();
+  fetchUserInfo();
+  // const selector = useSelector(state => state)
+  // const userInfo = getUserInfo();
 
   return (
     <div className={classes.paper}>

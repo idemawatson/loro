@@ -1,14 +1,16 @@
 import { reducerWithInitialState } from "typescript-fsa-reducers";
+import { UserInfo } from "users/types";
 
 export interface State {
-  user: {
-    userId: string;
-  };
+  userInfo: UserInfo;
 }
 
 export const initialState: State = {
-  user: {
+  userInfo: {
     userId: "000001",
+    userName: "",
+    numFollowed: 0,
+    numFollowing: 0,
   },
 };
 
