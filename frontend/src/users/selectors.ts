@@ -1,6 +1,7 @@
 import { createSelector } from "reselect";
-import { State } from "reducks/reducer";
+import { AppState } from "reducks/store";
 
-const usersSelector = (state: State) => state.userInfo;
-
-export const getUserInfo = createSelector([usersSelector], (state) => state);
+const userInfoSelector = (state: AppState) => {
+  return state.userInfo;
+};
+export const getUserInfo = createSelector([userInfoSelector], (state) => state);

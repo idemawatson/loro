@@ -15,17 +15,11 @@ const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const User: React.FC = () => {
   const classes = useStyles();
-  const userInfo = {
-    username: "ideTakumi0812",
-    numPost: 9,
-    numFollowing: 78,
-    numFollowed: 86,
-  };
   return (
     <>
       <Container component="main" maxWidth="xs">
         <CssBaseline>
-          <UserInfoSection {...userInfo}></UserInfoSection>
+          <UserInfoSection></UserInfoSection>
           <Grid container className={classes.postArea}>
             {cards.map((card) => (
               <Grid item key={card} xs={4}>

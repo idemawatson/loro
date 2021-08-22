@@ -4,16 +4,9 @@ import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { fetchUserInfo } from "users/operations";
 import { getUserInfo } from "users/selectors";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-export type UserInfoSectionProps = {
-  username: string;
-  numPost: number;
-  numFollowing: number;
-  numFollowed: number;
-};
-
-const UserInfoSection: React.FC<UserInfoSectionProps> = (props) => {
+const UserInfoSection: React.FC = () => {
   const useStyles = makeStyles((theme) => ({
     paper: {
       marginTop: theme.spacing(4),
@@ -34,16 +27,16 @@ const UserInfoSection: React.FC<UserInfoSectionProps> = (props) => {
     },
   }));
   const classes = useStyles();
-  fetchUserInfo();
-  // const selector = useSelector(state => state)
-  // const userInfo = getUserInfo();
+  const dispatch = useDispatch();
+  dispatch(fetchUserInfo());
+  const userInfo = useSelector(getUserInfo);
 
   return (
     <div className={classes.paper}>
       <Grid container className={classes.title}>
         <Grid item xs={12}>
           <Typography component="h1" variant="h5">
-            {props.username}
+            {userInfo.userName}
           </Typography>
         </Grid>
       </Grid>
@@ -53,15 +46,15 @@ const UserInfoSection: React.FC<UserInfoSectionProps> = (props) => {
         </Grid>
         <Grid container>
           <Grid item xs={3} className={classes.caption}>
-            <Typography>{props.numPost}</Typography>
+            <Typography>0</Typography>
             <Typography variant="caption">投稿</Typography>
           </Grid>
           <Grid item xs={3} className={classes.caption}>
-            <Typography>{props.numFollowed}</Typography>
+            <Typography>{userInfo.numFollowed}</Typography>
             <Typography variant="caption">フォロワー</Typography>
           </Grid>
           <Grid item xs={3} className={classes.caption}>
-            <Typography>{props.numFollowing}</Typography>
+            <Typography>{userInfo.numFollowing}</Typography>
             <Typography variant="caption">フォロー中</Typography>
           </Grid>
         </Grid>
@@ -69,4 +62,10 @@ const UserInfoSection: React.FC<UserInfoSectionProps> = (props) => {
     </div>
   );
 };
+
+// const mapStateToProps = (state: State) => {
+//   return {
+//     userInfo: getUserInfo(state),
+//   };
+// };
 export default UserInfoSection;
