@@ -12,3 +12,7 @@ type User struct {
 	NumFollowed        int    `dynamo:"numFollowed"`
 	NumFavorite        int    `dynamo:"numFavorite"`
 }
+
+type GetUserInfoRequest struct {
+	UserId string `json:"userId"`
+}

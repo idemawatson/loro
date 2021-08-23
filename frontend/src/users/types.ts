@@ -4,3 +4,7 @@ export interface UserInfo {
   numFollowing: number;
   numFollowed: number;
 }
+
+export interface getUserInfoRequest {
+  userId: string;
+}

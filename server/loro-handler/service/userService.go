@@ -22,9 +22,10 @@ func (UserService) CreateUser() error {
 	return nil
 }
 
-func (UserService) ListUser() ([]models.User, error) {
+func (UserService) ListUser(req *models.GetUserInfoRequest) ([]models.User, error) {
 	table := database.GetMainTable()
 	var results []models.User
-	err := table.Get("id", "000001").All(&results)
+
+	err := table.Get("userId", req.UserId).All(&results)
 	return results, err
 }
