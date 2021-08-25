@@ -7,6 +7,7 @@ const initialState: UserInfo = {
   userName: "",
   numFollowed: 0,
   numFollowing: 0,
+  numPost: 0,
 };
 
 const Reducer = reducerWithInitialState(initialState);
@@ -15,6 +16,6 @@ export const UserInfoReducer = Reducer.case(
   Actions.fetchUserInfoAction,
   (state, payload: UserInfo) => ({
     ...state,
-    user: { ...state, ...payload },
+    ...payload,
   })
 );

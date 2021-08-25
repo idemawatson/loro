@@ -1,9 +1,12 @@
 package service
 
 import (
+	"fmt"
 	"log"
 	"loro-handler/database"
 	"loro-handler/models"
+
+	"github.com/guregu/dynamo"
 )
 
 type UserService struct{}
@@ -22,10 +25,10 @@ func (UserService) CreateUser() error {
 	return nil
 }
 
-func (UserService) ListUser(req *models.GetUserInfoRequest) ([]models.User, error) {
+func (UserService) GetUserInfo(req *models.GetUserInfoRequest) (models.User, error) {
 	table := database.GetMainTable()
-	var results []models.User
-
-	err := table.Get("userId", req.UserId).All(&results)
-	return results, err
+	var result models.User
+	fmt.Printf("[INFO] GetUserInfo request: %v\n", req.UserId)
+	err := table.Get("userId", req.UserId).Range("profile", dynamo.Equal, "true").Index("userId-profile-Index").One(&result)
+	return result, err
 }

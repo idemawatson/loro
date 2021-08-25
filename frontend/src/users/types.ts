@@ -3,6 +3,7 @@ export interface UserInfo {
   userName: string;
   numFollowing: number;
   numFollowed: number;
+  numPost: number;
 }
 
 export interface getUserInfoRequest {

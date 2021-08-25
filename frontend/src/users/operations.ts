@@ -8,7 +8,7 @@ export const fetchUserInfo = () => {
       userId: "000001",
     };
     const response = await apiAccessor.postRequest("/user", request);
-    const userInfo: UserInfo = response.data;
+    const userInfo: UserInfo = response.data.result;
     dispatch({
       type: fetchUserInfoAction,
       payload: userInfo,

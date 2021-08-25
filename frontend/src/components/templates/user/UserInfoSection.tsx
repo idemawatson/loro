@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { fetchUserInfo } from "users/operations";
 import { getUserInfo } from "users/selectors";
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const UserInfoSection: React.FC = () => {
   const useStyles = makeStyles((theme) => ({
@@ -28,7 +29,9 @@ const UserInfoSection: React.FC = () => {
   }));
   const classes = useStyles();
   const dispatch = useDispatch();
-  dispatch(fetchUserInfo());
+  useEffect(() => {
+    dispatch(fetchUserInfo());
+  }, []);
   const userInfo = useSelector(getUserInfo);
 
   return (
@@ -46,7 +49,7 @@ const UserInfoSection: React.FC = () => {
         </Grid>
         <Grid container>
           <Grid item xs={3} className={classes.caption}>
-            <Typography>0</Typography>
+            <Typography>{userInfo.numPost}</Typography>
             <Typography variant="caption">投稿</Typography>
           </Grid>
           <Grid item xs={3} className={classes.caption}>
