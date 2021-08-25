@@ -1,9 +1,10 @@
 import { combineReducers, createStore, compose, applyMiddleware } from "redux";
-import { Reducer, State } from "store/reducer";
+import { UserInfoReducer } from "users/reducers";
+import { UserInfo } from "users/types";
 import thunk from "redux-thunk";
 
 export type AppState = {
-  state: State;
+  userInfo: UserInfo;
 };
 
 const storeEnhancers =
@@ -11,7 +12,7 @@ const storeEnhancers =
 
 const store = createStore(
   combineReducers<AppState>({
-    state: Reducer,
+    userInfo: UserInfoReducer,
   }),
   storeEnhancers(applyMiddleware(thunk))
 );

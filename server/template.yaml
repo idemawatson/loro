@@ -43,6 +43,8 @@ Resources:
           AttributeType: S
         - AttributeName: following
           AttributeType: S
+        - AttributeName: profile
+          AttributeType: S
       KeySchema:
         - AttributeName: id
           KeyType: HASH
@@ -50,6 +52,17 @@ Resources:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
       GlobalSecondaryIndexes:
+        - IndexName: userId-profile-Index
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            - AttributeName: profile
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
         - IndexName: userId-following-Index
           KeySchema:
             - AttributeName: userId

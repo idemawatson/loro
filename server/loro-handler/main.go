@@ -16,15 +16,11 @@ var ginLambda *ginadapter.GinLambda
 
 func init() {
 	r := gin.Default()
+	r.Use(middleware.SetCorsHeader)
 	r.Use(middleware.RecordUaAndTime)
 	r.Use(middleware.ErrorHandler)
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
 	userController := controllers.NewUserController()
-	r.GET("/listUser", userController.ListUser)
+	r.POST("/user", userController.GetUserInfo)
 
 	ginLambda = ginadapter.New(r)
 }
