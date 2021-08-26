@@ -11,6 +11,42 @@ Globals:
     Timeout: 25
 
 Resources:
+  LoroUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: false
+        UnusedAccountValidityDays: 7
+      AutoVerifiedAttributes:
+        - email
+      MfaConfiguration: "OFF"
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+          RequireUppercase: false
+  LoroUserPoolAppClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: mobile_app
+      ExplicitAuthFlows:
+        - USER_PASSWORD_AUTH
+      GenerateSecret: false
+      UserPoolId: !Ref LoroUserPool
+  LoroApiGateway:
+    DependsOn:
+      - LoRoHandlerFunction
+      - LoroUserPool
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Auth:
+        DefaultAuthorizer: CognitoAuthorizer
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: !GetAtt LoroUserPool.Arn
   LoRoHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -24,6 +60,7 @@ Resources:
           Properties:
             Path: "/{proxy+}"
             Method: ANY
+            RestApiId: !Ref LoroApiGateway
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
           REGION: "ap-northeast-1"
@@ -98,12 +135,15 @@ Resources:
             WriteCapacityUnits: 1
 
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  UserPoolId:
+    Description: UserPool ID
+    Value: !Ref LoroUserPool
+  UserPoolAppClientId:
+    Description: App Client ID
+    Value: !Ref LoroUserPoolAppClient
   LoRoHandlerAPI:
     Description: "API Gateway endpoint URL for Prod environment for First Function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+    Value: !Sub "https://${LoroApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
   LoRoHandlerFunction:
     Description: "First Lambda Function ARN"
     Value: !GetAtt LoRoHandlerFunction.Arn
