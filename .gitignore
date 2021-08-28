@@ -2,3 +2,4 @@
 env.json
 samconfig.toml
 node_modules
+cover.*
