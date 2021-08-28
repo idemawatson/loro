@@ -2,33 +2,25 @@ package service
 
 import (
 	"fmt"
-	"log"
-	"loro-handler/database"
 	"loro-handler/models"
-
-	"github.com/guregu/dynamo"
+	"loro-handler/repository"
 )
 
-type UserService struct{}
-
-func (UserService) CreateUser() error {
-	user := models.User{
-		Id:     "000001",
-		UserId: "000001",
-	}
-	table := database.GetMainTable()
-	log.Printf("user: %+v\n", user)
-	err := table.Put(user).Run()
-	if err != nil {
-		return err
-	}
-	return nil
+type UserService interface {
+	GetUserInfo(req *models.GetUserInfoRequest) (models.User, error)
 }
 
-func (UserService) GetUserInfo(req *models.GetUserInfoRequest) (models.User, error) {
-	table := database.GetMainTable()
-	var result models.User
+type userService struct {
+	ur repository.UserRepo
+}
+
+func NewUserService(ur repository.UserRepo) UserService {
+	return &userService{ur}
+}
+
+func (us *userService) GetUserInfo(req *models.GetUserInfoRequest) (models.User, error) {
 	fmt.Printf("[INFO] GetUserInfo request: %v\n", req.UserId)
-	err := table.Get("userId", req.UserId).Range("profile", dynamo.Equal, "true").Index("userId-profile-Index").One(&result)
+	result, err := us.ur.GetUserInfo(req.UserId)
+	fmt.Printf("[INFO] GetUserInfo response: %v\n", result)
 	return result, err
 }

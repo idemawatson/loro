@@ -19,8 +19,8 @@ func init() {
 	r.Use(middleware.SetCorsHeader)
 	r.Use(middleware.RecordUaAndTime)
 	r.Use(middleware.ErrorHandler)
-	userController := controllers.NewUserController()
-	r.POST("/user", userController.GetUserInfo)
+	controllers := controllers.GetControllers()
+	r.POST("/user", controllers.UserController.GetUserInfo)
 
 	ginLambda = ginadapter.New(r)
 }

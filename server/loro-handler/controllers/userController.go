@@ -1,29 +1,31 @@
 package controllers
 
 import (
-	"fmt"
 	"loro-handler/models"
+	"loro-handler/repository"
 	"loro-handler/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-type UserController struct{}
+type UserController struct {
+	userRepo repository.UserRepo
+}
+
 type GetUserInfoRequest struct {
 	UserId string `json:"userId"`
 }
 
-func NewUserController() *UserController {
-	return new(UserController)
+func NewUserController(userRepo repository.UserRepo) *UserController {
+	return &UserController{userRepo}
 }
 
 func (uc *UserController) GetUserInfo(c *gin.Context) {
 	var req models.GetUserInfoRequest
 	c.ShouldBindJSON(&req)
-	fmt.Println(req)
-	userService := service.UserService{}
-	userInfo, err := userService.GetUserInfo(&req)
+	us := service.NewUserService(uc.userRepo)
+	userInfo, err := us.GetUserInfo(&req)
 	if err != nil {
 		c.Error(err).SetType(gin.ErrorTypePublic)
 		return
