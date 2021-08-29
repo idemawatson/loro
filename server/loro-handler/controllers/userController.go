@@ -10,7 +10,7 @@ import (
 )
 
 type UserController struct {
-	userRepo repository.UserRepo
+	us service.UserService
 }
 
 type GetUserInfoRequest struct {
@@ -18,14 +18,14 @@ type GetUserInfoRequest struct {
 }
 
 func NewUserController(userRepo repository.UserRepo) *UserController {
-	return &UserController{userRepo}
+	us := service.NewUserService(userRepo)
+	return &UserController{us}
 }
 
 func (uc *UserController) GetUserInfo(c *gin.Context) {
 	var req models.GetUserInfoRequest
 	c.ShouldBindJSON(&req)
-	us := service.NewUserService(uc.userRepo)
-	userInfo, err := us.GetUserInfo(&req)
+	userInfo, err := uc.us.GetUserInfo(&req)
 	if err != nil {
 		c.Error(err).SetType(gin.ErrorTypePublic)
 		return
