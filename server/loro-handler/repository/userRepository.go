@@ -11,10 +11,10 @@ type UserRepo interface {
 }
 
 type userRepo struct {
-	table dynamo.Table
+	table dynamoTableClient
 }
 
-func NewUserRepository(table *dynamo.Table) UserRepo {
+func NewUserRepository(table *dynamoTableClient) UserRepo {
 	return &userRepo{*table}
 }
 
